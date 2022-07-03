@@ -1,7 +1,16 @@
-from apitest import Flask
+import http.client
+import config
 
-app = Flask(__name__)
+conn = http.client.HTTPSConnection("api.collectapi.com")
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+headers = {
+    'content-type': "application/json",
+    'authorization': config.key
+    }
+
+conn.request("GET", "/gasPrice/stateUsaPrice?state=IL", headers=headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
